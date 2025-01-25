@@ -1,0 +1,27 @@
+@import url("normalize.css");
+@import url("./fonts/lato/style.css");
+
+html,
+body {
+  overscroll-behavior-x: none;
+}
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+body {
+  margin: 0 auto;
+  font-family: Lato;
+  box-sizing: border-box;
+}
+
+html,
+html body {
+  height: calc(var(--vh, 1dvh) * 100);
+}
+
+#app {
+  height: 100%;
+  box-sizing: border-box;
+  max-width: 1280px;
+}
