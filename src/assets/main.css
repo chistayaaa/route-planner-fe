@@ -1,5 +1,5 @@
 @import url("normalize.css");
-@import url("./fonts/lato/style.css");
+@import url("./fonts/Inter/inter.css");
 
 html,
 body {
@@ -11,7 +11,7 @@ body {
 }
 body {
   margin: 0 auto;
-  font-family: Lato;
+  font-family: Inter;
   box-sizing: border-box;
 }
 

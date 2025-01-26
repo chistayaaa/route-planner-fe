@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import manMap from '@/assets/images/png/map-welcome.png'
+import town from "@/assets/images/png/petersburg.png";
 </script>
 
 <template>
   <div class="container">
     <div class="image-container">
       <span class="gradient"></span>
-      <img :src="manMap" alt="man-with-map" />
+      <img :src="town" alt="man-with-map" />
     </div>
     <div class="text-container">
-      <h1>Route Planner</h1>
-      <p>Plan your journey efficiently</p>
+      <h1>Маршрутный планнер</h1>
+      <p>Находи интересные места под себя</p>
     </div>
-    <RouterLink to="/login"> <v-btn icon="mdi-arrow-right" color="red"></v-btn></RouterLink>
+    <RouterLink to="/login">
+      <v-btn icon="mdi-arrow-right" color="blue"></v-btn
+    ></RouterLink>
   </div>
 </template>
 
@@ -38,7 +40,7 @@ p {
   align-items: center;
 
   & h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
   }
 
@@ -54,7 +56,7 @@ p {
 }
 .gradient {
   position: absolute;
-  height: 170px;
+  height: 250px;
   width: 100%;
   background: radial-gradient(circle at center, #1e90ff80, rgb(255, 255, 255));
   filter: blur(50px);

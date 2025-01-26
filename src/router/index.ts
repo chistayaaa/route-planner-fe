@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import WelcomeView from '../views/WelcomeView.vue'
 import AuthView from '../views/AuthView.vue'
+import HomeView from '../views/HomeView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import { useUserStore } from '../stores/user'
 import { storeToRefs } from 'pinia'
+import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,9 +26,14 @@ const router = createRouter({
       component: RegisterView,
     },
     {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: ForgotPasswordView,
+    },
+    {
       path: '/',
       name: 'home',
-      component: WelcomeView,
+      component: HomeView,
       meta: { requiresAuth: true },
       // beforeEnter: (to, from) => {
       //   // reject the navigation

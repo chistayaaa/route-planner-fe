@@ -1,20 +1,55 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import logo from '@/assets/images/svg/logo.svg'
+import { ref } from "vue";
+import logo from "@/assets/images/svg/logo.svg";
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
+import { registerUser } from "@/utils/requests/user/register";
 
-const handleRegister = () => {
-  // Здесь будет логика регистрации
-  console.log('Register attempt:', {
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const showPassword = ref(false);
+const loading = ref(false);
+
+const responseMessage = ref("");
+const userRegistered = ref(false);
+const count = ref(5);
+
+const handleRegister = async () => {
+  responseMessage.value = ``;
+  console.log("Register attempt:", {
     name: name.value,
     email: email.value,
     password: password.value,
-  })
-}
+  });
+
+  let response;
+  loading.value = true;
+
+  try {
+    response = await registerUser({
+      email: email.value,
+      password: password.value,
+      name: name.value,
+    });
+
+    if (response?.id) {
+      userRegistered.value = true;
+      setInterval(() => {
+        count.value--;
+        if (count.value <= 0) {
+          clearInterval(this);
+          window.location.href = "/login";
+        }
+      }, 1000);
+    }
+  } catch (e) {
+    console.log("Error for register: response", e);
+    responseMessage.value = `${e}`;
+  }
+
+  loading.value = false;
+  console.log("Response for register: response", response);
+};
 </script>
 
 <template>
@@ -24,10 +59,14 @@ const handleRegister = () => {
     </div>
 
     <div class="form-container">
-      <h1>Start planning your routes now!</h1>
-      <p>Create your account to continue</p>
+      <h1>Начни планировать свой маршрут</h1>
+      <p>Создайте аккаунт, чтобы продолжить</p>
 
-      <v-form @submit.prevent="handleRegister" class="register-form">
+      <v-form
+        @submit.prevent="handleRegister"
+        class="register-form"
+        v-if="!userRegistered"
+      >
         <v-text-field
           v-model="name"
           label="Name"
@@ -38,7 +77,7 @@ const handleRegister = () => {
 
         <v-text-field
           v-model="email"
-          label="Email Address"
+          label="Email"
           type="email"
           variant="outlined"
           prepend-inner-icon="mdi-email"
@@ -47,7 +86,7 @@ const handleRegister = () => {
 
         <v-text-field
           v-model="password"
-          label="Password"
+          label="Пароль"
           :type="showPassword ? 'text' : 'password'"
           variant="outlined"
           prepend-inner-icon="mdi-lock"
@@ -56,13 +95,26 @@ const handleRegister = () => {
           class="mb-6"
         ></v-text-field>
 
-        <v-btn type="submit" color="red" block size="large" class="mb-4"> Sign Up </v-btn>
+        <v-btn
+          type="submit"
+          color="blue"
+          block
+          size="large"
+          class="mb-4"
+          :loading="loading"
+        >
+          Зарегистрироваться
+        </v-btn>
 
-        <div class="text-center mb-4" style="display: none;">
+        <div class="text-center mb-4 error-message" v-if="responseMessage">
+          <span class="text-red">{{ responseMessage }}</span>
+        </div>
+
+        <div class="text-center mb-4" style="display: none">
           <span class="text-grey">or sign up with</span>
         </div>
 
-        <div class="social-buttons" style="display: none;">
+        <div class="social-buttons" style="display: none">
           <v-btn variant="outlined" class="social-btn">
             <v-icon>mdi-google</v-icon>
           </v-btn>
@@ -76,11 +128,17 @@ const handleRegister = () => {
 
         <div class="text-center mt-4">
           <RouterLink to="/login" class="text-decoration-none">
-            <span class="text-grey">Already have an account? </span>
-            <span class="text-red">Login</span>
+            <span class="text-grey">Уже есть аккаунт? </span>
+            <span class="text-blue">Войти в профиль</span>
           </RouterLink>
         </div>
       </v-form>
+      <div v-else class="success-container">
+        <p class="success-message text-blue" style="font-weight: bold">
+          Пользователь успешно зарегистрирован
+        </p>
+        <div>Редирект на страницу авторизации {{ count }} секунд...</div>
+      </div>
     </div>
   </div>
 </template>
@@ -147,5 +205,15 @@ p {
 
 :deep(.v-btn) {
   border-radius: 12px;
+}
+
+.success-container {
+  border-radius: 16px;
+  border: 1px solid #e5e6e7;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 12px;
 }
 </style>

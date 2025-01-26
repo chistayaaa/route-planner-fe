@@ -1,45 +1,53 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import logo from '@/assets/images/svg/logo.svg'
+import { ref } from "vue";
+import logo from "@/assets/images/svg/logo.svg";
 
-import { useUserStore } from '@/stores/user'
-import { loginUser } from '@/utils/requests/login'
+import { useUserStore } from "@/stores/user";
+import { loginUser } from "@/utils/requests/user/login";
 
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
+const email = ref("");
+const password = ref("");
+const showPassword = ref(false);
 
-
-const responseMessage = ref('')
+const responseMessage = ref("");
+const loading = ref(false);
 
 const handleLogin = async () => {
-  console.log('Login attempt:', { email: email.value, password: password.value })
+  responseMessage.value = ``;
+  console.log("Login attempt:", {
+    email: email.value,
+    password: password.value,
+  });
 
-  let response
+  let response;
+  loading.value = true;
 
   try {
-    response = await loginUser({ email: email.value, password: password.value })
+    response = await loginUser({
+      email: email.value,
+      password: password.value,
+    });
     if (response?.token) {
       // save user
-      const userStore = useUserStore()
-      userStore.setToken(response.token)
-      userStore.setUser(response.user)
+      const userStore = useUserStore();
+      userStore.setToken(response.token);
+      userStore.setUser(response.user);
 
-      console.log(userStore, 'userStore')
+      console.log(userStore, "userStore");
 
-      // setTimeout(() => {
-      //   window.location.replace('/')
-      //   clearTimeout(this)
-      // }, 3000)
-
+      setTimeout(() => {
+        window.location.replace("/");
+        clearTimeout(this);
+      }, 3000);
     }
   } catch (e) {
-    console.log('Error for login: response', e)
-    responseMessage.value = 'Error. Try again later.'
+    console.log("Error for login: response", e);
+    responseMessage.value = "Что-то пошло не так. Попробуйте снова позже.";
   }
 
-  console.log('Response for login: response', response)
-}
+  loading.value = false;
+  console.log("Response for login: response", response);
+};
 </script>
 
 <template>
@@ -49,8 +57,8 @@ const handleLogin = async () => {
     </div>
 
     <div class="form-container">
-      <h1>Welcome Back!</h1>
-      <p>Sign in to continue planning</p>
+      <h1>С возвращением!</h1>
+      <p>Войдите, чтобы продолжить планирование</p>
 
       <v-form @submit.prevent="handleLogin" class="login-form">
         <v-text-field
@@ -64,7 +72,7 @@ const handleLogin = async () => {
 
         <v-text-field
           v-model="password"
-          label="Password"
+          label="Пароль"
           :type="showPassword ? 'text' : 'password'"
           variant="outlined"
           prepend-inner-icon="mdi-lock"
@@ -73,7 +81,16 @@ const handleLogin = async () => {
           class="mb-6"
         ></v-text-field>
 
-        <v-btn type="submit" color="red" block size="large" class="mb-4"> Login </v-btn>
+        <v-btn
+          :loading="loading"
+          type="submit"
+          color="blue"
+          block
+          size="large"
+          class="mb-4"
+        >
+          Продолжить
+        </v-btn>
         <div class="text-center mb-4 error-message" v-if="responseMessage">
           <span class="text-red">{{ responseMessage }}</span>
         </div>
@@ -96,8 +113,14 @@ const handleLogin = async () => {
 
         <div class="text-center mt-4">
           <RouterLink to="/register" class="text-decoration-none">
-            <span class="text-grey">Don't have an account? </span>
-            <span class="text-red">Register</span>
+            <span class="text-grey">Нет аккаунта? </span>
+            <span class="text-blue">Регистрация</span>
+          </RouterLink>
+        </div>
+
+        <div class="text-center mt-4">
+          <RouterLink to="/forgot-password" class="text-decoration-none">
+            <span class="text-grey">Забыли пароль? </span>
           </RouterLink>
         </div>
       </v-form>
@@ -169,4 +192,3 @@ p {
   border-radius: 12px;
 }
 </style>
-
