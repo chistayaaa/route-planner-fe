@@ -1,7 +1,7 @@
 import { api } from "../api";
 
 interface ResetBody {
-  password: string;
+  newPassword: string;
   token: string;
 }
 
