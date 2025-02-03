@@ -24,7 +24,6 @@ p {
   margin: 0;
 }
 .container {
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;

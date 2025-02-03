@@ -69,7 +69,7 @@ const handleRegister = async () => {
       >
         <v-text-field
           v-model="name"
-          label="Name"
+          label="Имя"
           variant="outlined"
           prepend-inner-icon="mdi-account"
           class="mb-4"
@@ -167,7 +167,6 @@ const handleRegister = async () => {
 
 .form-container {
   width: 100%;
-  max-width: 400px;
   text-align: center;
 }
 

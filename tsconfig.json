@@ -1,6 +1,10 @@
 {
   "files": [],
   "compilerOptions": {
+    "types": ["node"],
+    "target": "esnext", 
+    "module": "esnext", 
+    "strict": true, 
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

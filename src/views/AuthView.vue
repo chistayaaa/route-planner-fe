@@ -36,16 +36,17 @@ const handleLogin = async () => {
       console.log(userStore, "userStore");
 
       setTimeout(() => {
+        loading.value = false;
         window.location.replace("/");
         clearTimeout(this);
-      }, 3000);
+      }, 2000);
     }
   } catch (e) {
     console.log("Error for login: response", e);
     responseMessage.value = "Что-то пошло не так. Попробуйте снова позже.";
+    loading.value = false;
   }
 
-  loading.value = false;
   console.log("Response for login: response", response);
 };
 </script>
@@ -152,7 +153,6 @@ const handleLogin = async () => {
 
 .form-container {
   width: 100%;
-  max-width: 400px;
   text-align: center;
 }
 

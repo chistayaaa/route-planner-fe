@@ -1,45 +1,55 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import WelcomeView from '../views/WelcomeView.vue'
-import AuthView from '../views/AuthView.vue'
-import HomeView from '../views/HomeView.vue'
-import RegisterView from '../views/RegisterView.vue'
-import { useUserStore } from '../stores/user'
-import { storeToRefs } from 'pinia'
-import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import WelcomeView from "../views/WelcomeView.vue";
+import AuthView from "../views/AuthView.vue";
+import HomeView from "../views/HomeView.vue";
+import RegisterView from "../views/RegisterView.vue";
+import SettingsView from "../views/SettingsView.vue";
+import { useUserStore } from "../stores/user";
+import { storeToRefs } from "pinia";
+import ForgotPasswordView from "@/views/ForgotPasswordView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/welcome',
-      name: 'welcome',
+      path: "/welcome",
+      name: "welcome",
+      meta: { HideMenuBottom: true},
       component: WelcomeView,
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
+      meta: { HideMenuBottom: true},
       component: AuthView,
     },
     {
-      path: '/register',
-      name: 'register',
+      path: "/register",
+      name: "register",
+      meta: { HideMenuBottom: true},
       component: RegisterView,
     },
     {
-      path: '/forgot-password',
-      name: 'forgot-password',
+      path: "/forgot-password",
+      name: "forgot-password",
+      meta: { HideMenuBottom: true},
       component: ForgotPasswordView,
     },
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true},
       // beforeEnter: (to, from) => {
       //   // reject the navigation
       //   return false
     },
-    // },
+    {
+      path: "/settings",
+      meta: { requiresAuth: true },
+      name: "settings",
+      component: SettingsView,
+    },
     // {
     //   path: '/user',
     //   beforeEnter() {
@@ -60,21 +70,21 @@ const router = createRouter({
     // meta: { requiresAuth: true }
     // },
   ],
-})
+});
 
 router.beforeEach(async (to) => {
-  const store = useUserStore()
-  const { isAuthenticated } = storeToRefs(store)
+  const store = useUserStore();
+  const { isAuthenticated } = storeToRefs(store);
 
-  console.log('User isAuthenticated: ', isAuthenticated.value)
+  console.log("User isAuthenticated: ", isAuthenticated.value);
 
   if (to.meta.requiresAuth && !isAuthenticated.value) {
-    return { name: 'welcome' }
+    return { name: "welcome" };
   }
 
-  if (isAuthenticated.value && (to.name === 'welcome' || to.name === 'login')) {
-    return { name: 'home' }
+  if (isAuthenticated.value && (to.name === "welcome" || to.name === "login")) {
+    return { name: "home" };
   }
-})
+});
 
-export default router
+export default router;
